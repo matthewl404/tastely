@@ -63,4 +63,9 @@ Return a JSON object in this format:
 
 // Listen on Render-assigned port
 const PORT = process.env.PORT || 5001;
+// Temporary test route
+app.get("/", (req, res) => {
+  res.send("Backend is running! POST to /predict to get suggestions.");
+});
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
