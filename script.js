@@ -19,7 +19,7 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          { role: "user", content: `Predict the taste for: ${ingredients}` }
+          { role: "user", content: `If I liked these ingredients ${ingredients} what food would you suggest for me? Try to be simple and include food that has the main ingredients but also try and include some food that might be a unique suggestion ` }
         ],
         max_tokens: 100
       })
@@ -32,3 +32,27 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
     resultDiv.innerText = "AI Error. Please try again.";
   }
 });
+const foodsDiv = document.getElementById("Foods");
+
+function addFoodCard(name, ingredients, description, imageUrl, recipeUrl) {
+  const card = document.createElement("div");
+  card.className = "food-card";
+  card.innerHTML = `
+    <img src="${imageUrl}" alt="${name}">
+    <div class="food-info">
+      <h3>${name}</h3>
+      <p><strong>Main Ingredients:</strong> ${ingredients}</p>
+      <p>${description}</p>
+      <a href="${recipeUrl}" target="_blank">View Recipe</a>
+    </div>
+  `;
+  foodsDiv.appendChild(card);
+}
+addFoodCard(
+  "hello",
+  "Pasta, Eggs, Cheese, Bacon",
+  "A creamy Italian pasta dish with rich flavor.",
+  "https://via.placeholder.com/80",
+  "https://www.example.com/recipe"
+);
+

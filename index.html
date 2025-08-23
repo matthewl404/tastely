@@ -5,25 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Taste Predictor</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
 </head>
 <body>
-  <h1>AI Taste Predictor</h1>
+  <div id="UI_ELEMENT"> 
+    <h1 id="heading">Tastely</h1>
 
-  <!-- Ingredients Input -->
-  <textarea id="ingredients" placeholder="Enter ingredients or meal description..."></textarea>
-  <br>
+    <!-- Ingredients Input -->
+    <textarea id="ingredients" placeholder="Enter potential ingredients or meal description..."></textarea>
+    <br>
 
-  <!-- Optional Photo Upload -->
-  <input type="file" id="mealPhoto" accept="image/*">
-  <br>
+    <!-- Optional Photo Upload -->
+    <input type="file" id="mealPhoto" accept="image/*">
+    <br>
 
-  <!-- Submit Button -->
-  <button id="predictBtn">Predict Taste</button>
+    <!-- Submit Button -->
+    <button id="predictBtn">Predict Taste</button>
 
-  <!-- Display Area -->
-  <div id="result"></div>
+    <!-- Display Area -->
+    <div id="result"></div>
 
-  <script src="script.js"></script>
+    <div id="Foods"> 
+      <div class="food-card">
+        <img src="https://via.placeholder.com/80" alt="Food Image">
+        <div class="food-info">
+          <h3>Spaghetti Carbonara</h3>
+          <p>Main Ingredients: Pasta, Eggs, Cheese, Bacon</p>
+          <p>"A creamy Italian pasta dish with rich flavor."</p>
+          <a href="https://www.example.com/recipe" target="_blank">View Recipe</a>
+        </div>
+      </div>
+
+
+
+      
+    </div>
+    <script src="script.js"></script>
+  </div>
 </body>
 </html>
 
