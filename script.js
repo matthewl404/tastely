@@ -8,6 +8,7 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
   }
 
   try {
+    // Send ingredients to backend
     const response = await fetch("http://localhost:5001/predict", {
       method: "POST",
       headers: {
@@ -17,21 +18,24 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
     });
 
     const data = await response.json();
+
+    // Show the prediction briefly in the top result div
     resultDiv.innerText = data.prediction;
+
+    // Add prediction as a food card at the top
+    addFoodCard(
+      data.prediction,
+      ingredients,
+      "Suggested by AI",
+      "https://via.placeholder.com/80",
+      "#"
+    );
   } catch (error) {
     console.error(error);
     resultDiv.innerText = "AI Error. Please try again.";
   }
 });
 
-
-    const data = await response.json();
-    resultDiv.innerText = data.choices[0].message.content;
-  } catch (error) {
-    console.error(error);
-    resultDiv.innerText = "AI Error. Please try again.";
-  }
-});
 const foodsDiv = document.getElementById("Foods");
 
 function addFoodCard(name, ingredients, description, imageUrl, recipeUrl) {
@@ -46,13 +50,6 @@ function addFoodCard(name, ingredients, description, imageUrl, recipeUrl) {
       <a href="${recipeUrl}" target="_blank">View Recipe</a>
     </div>
   `;
-  foodsDiv.appendChild(card);
+  // Insert new card at the top instead of appending
+  foodsDiv.prepend(card);
 }
-addFoodCard(
-  "hello",
-  "Pasta, Eggs, Cheese, Bacon",
-  "A creamy Italian pasta dish with rich flavor.",
-  "https://via.placeholder.com/80",
-  "https://www.example.com/recipe"
-);
-
