@@ -1,3 +1,4 @@
+// backend/server.js
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -7,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// POST /predict endpoint
 app.post("/predict", async (req, res) => {
   const { ingredients } = req.body;
   if (!ingredients) return res.status(400).json({ error: "No ingredients provided" });
@@ -21,16 +23,16 @@ app.post("/predict", async (req, res) => {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          { 
-            role: "user", 
-            content: `Suggest a food based on these ingredients: ${ingredients}. 
-Return a JSON object with this format:
+          {
+            role: "user",
+            content: `Suggest a food based on these ingredients: ${ingredients}.
+Return a JSON object in this format:
 {
   "name": "food name",
   "ingredients": "main ingredients",
   "description": "short description",
   "recipeUrl": "link to recipe"
-}` 
+}`
           }
         ],
         max_tokens: 200
@@ -38,15 +40,14 @@ Return a JSON object with this format:
     });
 
     const data = await response.json();
-    let aiText = data.choices[0].message.content;
+    let aiText = data.choices?.[0]?.message?.content || "";
     let json;
 
     try {
       json = JSON.parse(aiText);
     } catch (e) {
-      // fallback if AI response isn’t proper JSON
       json = {
-        name: aiText,
+        name: aiText || "Unknown dish",
         ingredients,
         description: "Suggested by AI",
         recipeUrl: "#"
@@ -60,4 +61,6 @@ Return a JSON object with this format:
   }
 });
 
-app.listen(5001, () => console.log("Server running on http://localhost:5001"));
+// Listen on Render-assigned port
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
