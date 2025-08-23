@@ -21,13 +21,39 @@ app.post("/predict", async (req, res) => {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          { role: "user", content: `Suggest a food based on these ingredients: ${ingredients}` }
+          { 
+            role: "user", 
+            content: `Suggest a food based on these ingredients: ${ingredients}. 
+Return a JSON object with this format:
+{
+  "name": "food name",
+  "ingredients": "main ingredients",
+  "description": "short description",
+  "recipeUrl": "link to recipe"
+}` 
+          }
         ],
-        max_tokens: 100
+        max_tokens: 200
       })
     });
+
     const data = await response.json();
-    res.json({ prediction: data.choices[0].message.content });
+    let aiText = data.choices[0].message.content;
+    let json;
+
+    try {
+      json = JSON.parse(aiText);
+    } catch (e) {
+      // fallback if AI response isn’t proper JSON
+      json = {
+        name: aiText,
+        ingredients,
+        description: "Suggested by AI",
+        recipeUrl: "#"
+      };
+    }
+
+    res.json(json);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "AI error" });
@@ -35,5 +61,3 @@ app.post("/predict", async (req, res) => {
 });
 
 app.listen(5001, () => console.log("Server running on http://localhost:5001"));
-
-
