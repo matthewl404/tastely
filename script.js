@@ -1,3 +1,5 @@
+const foodsDiv = document.getElementById("Foods");
+
 document.getElementById("predictBtn").addEventListener("click", async () => {
   const ingredients = document.getElementById("ingredients").value.trim();
   const resultDiv = document.getElementById("result");
@@ -8,36 +10,27 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
   }
 
   try {
-    // Send ingredients to backend
-    const response = await fetch("https://tastely-1.onrender.com/predict", {
+    const response = await fetch("https://YOUR-RENDER-BACKEND-URL.onrender.com/predict", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ingredients })
     });
 
     const data = await response.json();
+    resultDiv.innerText = `Suggested: ${data.name}`;
 
-    // Ensure all required fields exist
-    const name = data.name || "Unknown Dish";
-    const mainIngredients = data.ingredients || ingredients;
-    const description = data.description || "Suggested by AI";
-    const recipeUrl = data.recipeUrl || "#";
-    const imageUrl = data.imageUrl || "https://via.placeholder.com/80";
-
-    // Show the prediction briefly in the top result div
-    resultDiv.innerText = `Suggested: ${name}`;
-
-    // Add prediction as a food card at the top
-    addFoodCard(name, mainIngredients, description, imageUrl, recipeUrl);
+    addFoodCard(
+      data.name,
+      data.ingredients,
+      data.description,
+      "https://via.placeholder.com/80",
+      data.recipeUrl
+    );
   } catch (error) {
     console.error(error);
     resultDiv.innerText = "AI Error. Please try again.";
   }
 });
-
-const foodsDiv = document.getElementById("Foods");
 
 function addFoodCard(name, ingredients, description, imageUrl, recipeUrl) {
   const card = document.createElement("div");
@@ -51,6 +44,5 @@ function addFoodCard(name, ingredients, description, imageUrl, recipeUrl) {
       <a href="${recipeUrl}" target="_blank">View Recipe</a>
     </div>
   `;
-  // Insert new card at the top
   foodsDiv.prepend(card);
 }
