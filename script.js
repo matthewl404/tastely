@@ -20,15 +20,15 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
     const data = await response.json();
 
     // Show the prediction briefly in the top result div
-    resultDiv.innerText = `Suggested: ${data.prediction.name}`;
+    resultDiv.innerText = `Suggested: ${data.name}`;
 
     // Add prediction as a food card at the top
     addFoodCard(
-      data.prediction.name,
-      data.prediction.ingredients,
-      data.prediction.description,
-      data.prediction.imageUrl,
-      data.prediction.recipeUrl
+      data.name,
+      data.ingredients,
+      data.description,
+      data.imageUrl || "https://via.placeholder.com/80",
+      data.recipeUrl
     );
   } catch (error) {
     console.error(error);
