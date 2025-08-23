@@ -19,17 +19,18 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
 
     const data = await response.json();
 
+    // Ensure all required fields exist
+    const name = data.name || "Unknown Dish";
+    const mainIngredients = data.ingredients || ingredients;
+    const description = data.description || "Suggested by AI";
+    const recipeUrl = data.recipeUrl || "#";
+    const imageUrl = data.imageUrl || "https://via.placeholder.com/80";
+
     // Show the prediction briefly in the top result div
-    resultDiv.innerText = `Suggested: ${data.name}`;
+    resultDiv.innerText = `Suggested: ${name}`;
 
     // Add prediction as a food card at the top
-    addFoodCard(
-      data.name,
-      data.ingredients,
-      data.description,
-      data.imageUrl || "https://via.placeholder.com/80",
-      data.recipeUrl
-    );
+    addFoodCard(name, mainIngredients, description, imageUrl, recipeUrl);
   } catch (error) {
     console.error(error);
     resultDiv.innerText = "AI Error. Please try again.";
