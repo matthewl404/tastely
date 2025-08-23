@@ -41,8 +41,8 @@ Return a JSON object in this format:
 
     const data = await response.json();
     let aiText = data.choices?.[0]?.message?.content || "";
-    let json;
 
+    let json;
     try {
       json = JSON.parse(aiText);
     } catch (e) {
@@ -61,11 +61,5 @@ Return a JSON object in this format:
   }
 });
 
-// Listen on Render-assigned port
 const PORT = process.env.PORT || 5001;
-// Temporary test route
-app.get("/", (req, res) => {
-  res.send("Backend is running! POST to /predict to get suggestions.");
-});
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
