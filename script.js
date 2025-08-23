@@ -20,15 +20,15 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
     const data = await response.json();
 
     // Show the prediction briefly in the top result div
-    resultDiv.innerText = data.prediction;
+    resultDiv.innerText = `Suggested: ${data.prediction.name}`;
 
     // Add prediction as a food card at the top
     addFoodCard(
-      data.prediction,
-      ingredients,
-      "Suggested by AI",
-      "https://via.placeholder.com/80",
-      "#"
+      data.prediction.name,
+      data.prediction.ingredients,
+      data.prediction.description,
+      data.prediction.imageUrl,
+      data.prediction.recipeUrl
     );
   } catch (error) {
     console.error(error);
@@ -50,6 +50,6 @@ function addFoodCard(name, ingredients, description, imageUrl, recipeUrl) {
       <a href="${recipeUrl}" target="_blank">View Recipe</a>
     </div>
   `;
-  // Insert new card at the top instead of appending
+  // Insert new card at the top
   foodsDiv.prepend(card);
 }
