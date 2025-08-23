@@ -34,5 +34,6 @@ app.post("/predict", async (req, res) => {
   }
 });
 
-app.listen(5001, () => console.log("Server running on http://localhost:5000"));
+app.listen(5001, () => console.log("Server running on http://localhost:5001"));
+
 
