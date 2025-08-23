@@ -9,7 +9,7 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
 
   try {
     // Send ingredients to backend
-    const response = await fetch("http://localhost:5001/predict", {
+    const response = await fetch("https://tastely-1.onrender.com/predict", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
