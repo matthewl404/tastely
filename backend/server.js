@@ -35,27 +35,18 @@ Return JSON with keys: name, ingredients, description, recipeUrl.`
     });
 
     const data = await response.json();
-    console.log("Raw AI response:", data);
-    let aiText = data.choices?.[0]?.message?.content || "";
-
-    // Try to extract JSON from the response
-    let json;
-    try {
-      // Extract JSON substring if present
-      const match = aiText.match(/{[\s\S]*}/);
-      if (match) {
-        json = JSON.parse(match[0]);
-      } else {
-        throw new Error("No JSON found");
-      }
-    } catch (e) {
-      json = {
-        name: aiText || "Unknown dish",
-        ingredients,
-        description: "Suggested by AI",
-        recipeUrl: "#"
-      };
-    }
+let aiText = data.choices?.[0]?.message?.content || "";
+let json;
+try {
+  json = JSON.parse(aiText);
+} catch (e) {
+  json = {
+    name: aiText || "Unknown dish",
+    ingredients,
+    description: "Suggested by AI",
+    recipeUrl: "#"
+  };
+}
 
     res.json(json);
   } catch (err) {
@@ -66,6 +57,7 @@ Return JSON with keys: name, ingredients, description, recipeUrl.`
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
 
 
