@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import * as genai from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
 dotenv.config();
 
@@ -17,12 +17,10 @@ app.post("/predict", async (req, res) => {
   }
 
   try {
-    const response = await genai.models.generate({
-      model: "gemini-2.5",
-      apiKey: process.env.GEMINI_API_KEY,
-      prompt: `Suggest a dish using these ingredients: ${ingredients}.
+    const response = await genai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: `Suggest a dish using these ingredients: ${ingredients}.
 Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
-      max_output_tokens: 200
     });
 
     const aiText = response.output_text?.trim() || "";
@@ -53,3 +51,4 @@ Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
