@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Tastely Backend</title>
+</head>
+<body>
+  <h1>Test Tastely API</h1>
+  <textarea id="ingredients" placeholder="Enter ingredients..." rows="4" cols="50"></textarea>
+  <br>
+  <button id="testBtn">Send to API</button>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById("testBtn").addEventListener("click", async () => {
+      const ingredients = document.getElementById("ingredients").value.trim();
+      const resultDiv = document.getElementById("result");
+      if (!ingredients) {
+        resultDiv.innerText = "Please enter some ingredients!";
+        return;
+      }
+
+      try {
+        const response = await fetch("https://tastely-backend.onrender.com/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ingredients })
+        });
+
+        const data = await response.json();
+        resultDiv.innerText = JSON.stringify(data, null, 2);
+      } catch (err) {
+        console.error(err);
+        resultDiv.innerText = "Error calling API. See console.";
+      }
+    });
+  </script>
+</body>
+</html>
