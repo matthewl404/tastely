@@ -1,28 +1,26 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { TextGenerationModel } = require("@google/genai");
+const genai = require("@google/genai");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-const model = new TextGenerationModel({
-  model: "gemini-2.5-flash",
-  apiKey: process.env.GEMINI_API_KEY
-});
 
 app.post("/predict", async (req, res) => {
   const { ingredients } = req.body;
   if (!ingredients) return res.status(400).json({ error: "No ingredients provided" });
 
   try {
-    const response = await model.generate({
-      prompt: `Suggest a dish using these ingredients: ${ingredients}. Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
+    const response = await genai.models.generateText({
+      model: "gemini-2.5",
+      apiKey: process.env.GEMINI_API_KEY,
+      prompt: `Suggest a dish using these ingredients: ${ingredients}.
+Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
       max_output_tokens: 200
     });
 
-    const aiText = response.output[0].content[0].text.trim();
+    const aiText = response.output_text.trim();
 
     let json;
     try {
