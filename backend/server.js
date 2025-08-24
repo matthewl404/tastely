@@ -17,7 +17,7 @@ app.post("/predict", async (req, res) => {
   }
 
   try {
-    const response = await genai.models.generateContent({
+      const genai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
       model: "gemini-2.5-flash",
       contents: `Suggest a dish using these ingredients: ${ingredients}.
 Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
@@ -51,4 +51,5 @@ Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
