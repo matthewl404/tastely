@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Backend for AI Taste Predictor",
   "main": "server.js",
-  "type": "commonjs",
   "scripts": {
     "start": "node server.js"
   },
