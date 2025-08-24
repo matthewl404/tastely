@@ -1,49 +1,49 @@
-const foodsDiv = document.getElementById("Foods");
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
+const { Client } = require("@google/genai");
 
-document.getElementById("predictBtn").addEventListener("click", async () => {
-  const ingredients = document.getElementById("ingredients").value.trim();
-  const resultDiv = document.getElementById("result");
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-  if (!ingredients) {
-    resultDiv.innerText = "Please enter some ingredients!";
-    return;
-  }
+const client = new Client({ apiKey: process.env.GEMINI_API_KEY });
+
+app.post("/predict", async (req, res) => {
+  const { ingredients } = req.body;
+  if (!ingredients) return res.status(400).json({ error: "No ingredients provided" });
 
   try {
-    const response = await fetch("/predict", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ingredients })
+    const response = await client.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: `Suggest a dish using these ingredients: ${ingredients}. Return JSON with name, ingredients, description, recipeUrl.`
     });
 
-    const data = await response.json();
+    const aiText = response.text.trim();
 
-    const dishName = data.name || "Unknown dish";
-    const dishIngredients = data.ingredients || ingredients;
-    const dishDescription = data.description || "Suggested by AI";
-    const dishRecipeUrl = data.recipeUrl || "#";
+    let json;
+    try {
+      json = JSON.parse(aiText);
+    } catch {
+      json = {
+        name: aiText || "Unknown dish",
+        ingredients,
+        description: "Suggested by AI",
+        recipeUrl: "#"
+      };
+    }
 
-    resultDiv.innerText = `Suggested: ${dishName}`;
-
-    addFoodCard(dishName, dishIngredients, dishDescription, "https://via.placeholder.com/80", dishRecipeUrl);
-
+    res.json(json);
   } catch (err) {
-    console.error("Error fetching prediction:", err);
-    resultDiv.innerText = "Error contacting AI. Please try again later.";
+    console.error("Gemini API error:", err);
+    res.status(500).json({
+      name: "AI Unavailable",
+      ingredients,
+      description: "Gemini API error",
+      recipeUrl: "#"
+    });
   }
 });
 
-function addFoodCard(name, ingredients, description, imageUrl, recipeUrl) {
-  const card = document.createElement("div");
-  card.className = "food-card";
-  card.innerHTML = `
-    <img src="${imageUrl}" alt="${name}">
-    <div class="food-info">
-      <h3>${name}</h3>
-      <p><strong>Main Ingredients:</strong> ${ingredients}</p>
-      <p>${description}</p>
-      <a href="${recipeUrl}" target="_blank">View Recipe</a>
-    </div>
-  `;
-  foodsDiv.prepend(card);
-}
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
