@@ -1,4 +1,4 @@
-const express = require("express");
+IMconst express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const fetch = require("node-fetch");
@@ -16,7 +16,7 @@ app.post("/predict", async (req, res) => {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Authorization": `Bearer ${process.env.GEMINI_API_KEY}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -57,6 +57,7 @@ try {
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
 
 
