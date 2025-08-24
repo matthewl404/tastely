@@ -9,6 +9,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const genai = new GoogleGenAI({
+  apiKey: process.env.GOOGLE_API_KEY
+});
+
 app.post("/predict", async (req, res) => {
   const { ingredients } = req.body;
 
@@ -17,10 +21,10 @@ app.post("/predict", async (req, res) => {
   }
 
   try {
-  const response = await genai.models.generateContent({
-  model: "gemini-2.5-flash",
-  contents: `Suggest a dish using these ingredients: ${ingredients}. Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
-});
+    const response = await genai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: `Suggest a dish using these ingredients: ${ingredients}. Return strictly JSON with keys: name, ingredients, description, recipeUrl.`
+    });
 
     const aiText = response.output_text?.trim() || "";
 
@@ -37,6 +41,7 @@ app.post("/predict", async (req, res) => {
     }
 
     res.json(json);
+
   } catch (err) {
     console.error("Gemini API error:", err);
     res.status(500).json({
@@ -50,6 +55,3 @@ app.post("/predict", async (req, res) => {
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-
