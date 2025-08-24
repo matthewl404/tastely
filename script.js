@@ -18,6 +18,11 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
 
 
     const data = await response.json();
+    if (!response.ok) {
+      console.error("Backend error:", data);
+      resultDiv.innerText = data.error || data.message || "AI Error. Please try again.";
+      return;
+    }
     resultDiv.innerText = `Suggested: ${data.name}`;
 
     addFoodCard(
