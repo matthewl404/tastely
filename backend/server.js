@@ -20,7 +20,7 @@ app.post("/predict", async (req, res) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "gpt-3.5-turbo",
         messages: [
           {
             role: "user",
@@ -58,4 +58,5 @@ Do not include any extra text. Example: {"name":"Tacos","ingredients":"Beef, Tor
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
