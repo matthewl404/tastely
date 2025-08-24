@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { TextGenerationModel } from "@google/genai";
+import * as genai from "@google/genai";
 
 dotenv.config();
 
@@ -9,17 +9,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const model = new TextGenerationModel({
-  model: "gemini-2.5",
-  apiKey: process.env.GEMINI_API_KEY
-});
-
 app.post("/predict", async (req, res) => {
   const { ingredients } = req.body;
   if (!ingredients) return res.status(400).json({ error: "No ingredients provided" });
 
   try {
-    const response = await model.generate({
+    // Gemini generate call
+    const response = await genai.models.generate({
+      model: "gemini-2.5",
+      apiKey: process.env.GEMINI_API_KEY,
       prompt: `Suggest a dish using these ingredients: ${ingredients}.
 Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
       max_output_tokens: 200
@@ -53,4 +51,3 @@ Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
