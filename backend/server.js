@@ -38,9 +38,16 @@ Do not include any extra text. Example: {"name":"Tacos","ingredients":"Beef, Tor
     console.log("Raw AI response:", data);
     let aiText = data.choices?.[0]?.message?.content || "";
 
+    // Try to extract JSON from the response
     let json;
     try {
-      json = JSON.parse(aiText);
+      // Extract JSON substring if present
+      const match = aiText.match(/{[\s\S]*}/);
+      if (match) {
+        json = JSON.parse(match[0]);
+      } else {
+        throw new Error("No JSON found");
+      }
     } catch (e) {
       json = {
         name: aiText || "Unknown dish",
