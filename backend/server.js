@@ -27,6 +27,7 @@ app.post("/predict", async (req, res) => {
     });
 
     const aiText = response.output_text?.trim() || "";
+    console.log("Gemini raw response:", response);
 
     let json;
     try {

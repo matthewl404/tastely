@@ -27,6 +27,11 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
       "https://via.placeholder.com/80",
       data.recipeUrl
     );
+      if (!response.ok) {
+    console.error("OpenAI API error:", data);
+    return res.status(500).json({ error: data.error?.message || "Unknown OpenAI error" });
+  }
+
   } catch (error) {
     console.error(error);
     resultDiv.innerText = "AI Error. Please try again.";
