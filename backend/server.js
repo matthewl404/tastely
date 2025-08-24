@@ -11,19 +11,21 @@ app.use(express.json());
 
 app.post("/predict", async (req, res) => {
   const { ingredients } = req.body;
-  if (!ingredients) return res.status(400).json({ error: "No ingredients provided" });
+
+  if (!ingredients) {
+    return res.status(400).json({ error: "No ingredients provided" });
+  }
 
   try {
-  const response = await genai.models.text.generate({
-  model: "gemini-2.5",
-  apiKey: process.env.GEMINI_API_KEY,
-  prompt: `Suggest a dish using these ingredients: ${ingredients}. Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
-  max_output_tokens: 200
-});
-
+    const response = await genai.models.generate({
+      model: "gemini-2.5",
+      apiKey: process.env.GEMINI_API_KEY,
+      prompt: `Suggest a dish using these ingredients: ${ingredients}.
+Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
+      max_output_tokens: 200
     });
 
-    const aiText = response.output_text.trim();
+    const aiText = response.output_text?.trim() || "";
 
     let json;
     try {
@@ -51,6 +53,3 @@ app.post("/predict", async (req, res) => {
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-
