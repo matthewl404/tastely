@@ -34,7 +34,7 @@ Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
       json = {
         name: aiText || "Unknown dish",
         ingredients,
-        description: "Suggested by AI",
+        description: "Suggested by Gemini",
         recipeUrl: "#"
       };
     }
@@ -43,7 +43,7 @@ Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
   } catch (err) {
     console.error("Gemini API error:", err);
     res.status(500).json({
-      name: "AI Unavailable",
+      name: "Gemini Unavailable",
       ingredients,
       description: "Gemini API error",
       recipeUrl: "#"
@@ -53,3 +53,4 @@ Return strictly JSON with keys: name, ingredients, description, recipeUrl.`,
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
