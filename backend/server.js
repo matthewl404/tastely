@@ -1,4 +1,3 @@
-// backend/server.js
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -26,13 +25,8 @@ app.post("/predict", async (req, res) => {
           {
             role: "user",
             content: `Suggest a food based on these ingredients: ${ingredients}.
-Return a JSON object in this format:
-{
-  "name": "food name",
-  "ingredients": "main ingredients",
-  "description": "short description",
-  "recipeUrl": "link to recipe"
-}`
+Strictly return a JSON object with these keys: name, ingredients, description, recipeUrl.
+Do not include any extra text. Example: {"name":"Tacos","ingredients":"Beef, Tortilla","description":"Delicious tacos","recipeUrl":"https://example.com"}`
           }
         ],
         max_tokens: 200
@@ -40,6 +34,7 @@ Return a JSON object in this format:
     });
 
     const data = await response.json();
+    console.log("Raw AI response:", data);
     let aiText = data.choices?.[0]?.message?.content || "";
 
     let json;
@@ -63,3 +58,4 @@ Return a JSON object in this format:
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
